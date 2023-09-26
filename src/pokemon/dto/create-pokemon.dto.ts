@@ -14,5 +14,5 @@ export class CreatePokemonDto {
 
   @IsString()
   @MinLength(1)
-  readonly name: string;
+  public name: string;
 }
