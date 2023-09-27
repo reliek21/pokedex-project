@@ -3,26 +3,24 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Pokemon } from '../pokemon/entities/pokemon.entity';
 import { PokeResponse } from './interfaces/poke-response.interface';
+import { FetchAdapter } from 'src/common/adapters/fetch.adapter';
 
 @Injectable()
 export class SeedService {
   constructor(
     @InjectModel(Pokemon.name)
-    private readonly pokemonModel: Model<Pokemon>
+    private readonly pokemonModel: Model<Pokemon>,
+    private readonly htpp: FetchAdapter
   ){}
 
   async executeSeed() {
     await this.pokemonModel.deleteMany() // This is similar to: delete * from pokemons
     
-    const response: Response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=200', {
-      method: 'GET'
-    });
+    const response: PokeResponse = await this.htpp.get<PokeResponse>('https://pokeapi.co/api/v2/pokemon?limit=200')
 
     const pokemonToInsert: { name: string, no: number }[] = [];
     
-    const data: PokeResponse = await response.json();
-    
-    data.results.forEach(async ({ name, url }) => {
+    response.results.forEach(async ({ name, url }) => {
       const segments: string[] = url.split('/');
       const no: number = +segments[segments.length - 2];
 
