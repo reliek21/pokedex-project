@@ -13,13 +13,25 @@ npm install
 ```bash
 npm i -g @nestjs/cli
 ```
-4. Get up the database
+
+4. Clonar el archivo ``.env.example`` para poder correr el proyecto y renombrar a ``.env.local`` o ``.env``:
+```
+.env.example > .env.local
+```
+
+5. Llenar las variables de entorno definidas en el `.env`
+
+6. Ejecutar la aplicación en dev:
+```
+npm run start:dev
+```
+
+7. Get up the database
 ```bash
 docker-compose up -d
 ```
 
-5. Reconstruir la base de datos con la semilla
-
+8. Reconstruir la base de datos con la semilla haciendo una petición al siguiente ``endpoint``:
 ```
 http://localhost:3000/api/v2/seed
 ```
